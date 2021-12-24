@@ -7,13 +7,13 @@ class Application {
 
     public static \PDO $pdo;
 
-    public static function Run(): void {
+    public static function run(): void {
         set_error_handler(function($errno, $errstr, $errfile, $errline) {
             throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
         });
         ob_start();
         try {
-            self::RequireFilesInDir(self::APPLICATION_ROOT);
+            self::requireFilesInDir(self::APPLICATION_ROOT);
             self::$pdo = new \PDO('mysql:host=localhost;dbname=bank', 'bank-user-value', 'bank-password-value');
             self::executeAction(RouteParser::parse());
         } catch (\Throwable $exception) {
@@ -33,12 +33,12 @@ class Application {
         $controller->$actionName(...$getParameters);
     }
 
-    private static function RequireFilesInDir(string $directoryPath): void {
+    private static function requireFilesInDir(string $directoryPath): void {
         $files = scandir($directoryPath);
         for ($i = 2; $i < count($files); $i++) {
             $fullPath = $directoryPath . DIRECTORY_SEPARATOR . $files[$i];
             if (is_dir($fullPath) && $files[$i] != 'views') {
-                self::RequireFilesInDir($fullPath);
+                self::requireFilesInDir($fullPath);
             } else if(str_ends_with($files[$i], '.php')) {
                 require_once $fullPath;
             }
