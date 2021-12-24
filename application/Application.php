@@ -8,16 +8,36 @@ class Application {
     public static \PDO $pdo;
 
     public static function Run(): void {
-        self::RequireFilesInDir(self::APPLICATION_ROOT);
-        self::$pdo = new \PDO('mysql:host=localhost;dbname=bank', 'bank-user-value', 'bank-password-value');
-        $route = RouteParser::parse();
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
+        });
+        ob_start();
+        try {
+            self::RequireFilesInDir(self::APPLICATION_ROOT);
+            self::$pdo = new \PDO('mysql:host=localhost;dbname=bank', 'bank-user-value', 'bank-password-value');
+            self::executeAction(RouteParser::parse());
+        } catch (\Throwable $exception) {
+            ob_end_clean();
+            ob_start();
+            throw new \Exception('Application error', 0, $exception);
+        }
+        ob_end_flush();
+    }
+
+    private static function executeAction(array $route): void {
+        $controllerName = ucfirst(strtolower($route[0])) . 'Controller';
+        $actionName = 'action' . ucfirst(strtolower($route[1]));
+        $controller = new ('app' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . $controllerName)();
+        $getParameters = $_GET;
+        unset($getParameters['route']);
+        $controller->$actionName(...$getParameters);
     }
 
     private static function RequireFilesInDir(string $directoryPath): void {
         $files = scandir($directoryPath);
         for ($i = 2; $i < count($files); $i++) {
             $fullPath = $directoryPath . DIRECTORY_SEPARATOR . $files[$i];
-            if (is_dir($fullPath)) {
+            if (is_dir($fullPath) && $files[$i] != 'views') {
                 self::RequireFilesInDir($fullPath);
             } else if(str_ends_with($files[$i], '.php')) {
                 require_once $fullPath;
