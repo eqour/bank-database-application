@@ -25,8 +25,13 @@ class Application {
     }
 
     private static function executeAction(array $route): void {
-        $controllerName = ucfirst(strtolower($route[0])) . 'Controller';
-        $actionName = 'action' . ucfirst(strtolower($route[1]));
+        if (count($route) == 2) {
+            $controllerName = ucfirst(strtolower($route[0])) . 'Controller';
+            $actionName = 'action' . ucfirst(strtolower($route[1]));
+        } else {
+            $controllerName = 'DefaultController';
+            $actionName = 'actionMain';
+        }
         $controller = new ('app' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . $controllerName)();
         $getParameters = $_GET;
         unset($getParameters['route']);
