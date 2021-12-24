@@ -38,7 +38,16 @@ class Application {
         $controller->$actionName(...$getParameters);
     }
 
+    private static function getFilesToFirstRequire(): array {
+        return [
+            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'Controller.php'
+        ];
+    }
+
     private static function requireFilesInDir(string $directoryPath): void {
+        foreach (self::getFilesToFirstRequire() as $filename) {
+            require_once $filename;
+        }
         $files = scandir($directoryPath);
         for ($i = 2; $i < count($files); $i++) {
             $fullPath = $directoryPath . DIRECTORY_SEPARATOR . $files[$i];
