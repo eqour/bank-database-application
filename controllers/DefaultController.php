@@ -10,4 +10,9 @@ class DefaultController extends Controller {
     public function actionMain() {
         return $this->render('main');
     }
+
+    public function actionError404() {
+        header("HTTP/1.1 404 Not Found");
+        return $this->render('error404');
+    }
 }
