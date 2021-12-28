@@ -2,6 +2,8 @@
 
 namespace app\application;
 
+use app\controllers\DefaultController;
+
 class Application {
     public const APPLICATION_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
 
@@ -25,17 +27,28 @@ class Application {
     }
 
     private static function executeAction(array $route): void {
-        if (count($route) == 2) {
-            $controllerName = ucfirst(strtolower($route[0])) . 'Controller';
-            $actionName = 'action' . ucfirst(strtolower($route[1]));
-        } else {
-            $controllerName = 'DefaultController';
-            $actionName = 'actionMain';
-        }
-        $controller = new ('app' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . $controllerName)();
         $getParameters = $_GET;
         unset($getParameters['route']);
-        $controller->$actionName(...$getParameters);
+
+        if (count($route) === 0) {
+            (new DefaultController())->actionMain();
+            return;
+        } else if (count($route) === 2
+                && isset($route[0])
+                && isset($route[1])
+                && is_string($route[0])
+                && is_string($route[1])) {
+            $controllerName = ucfirst(strtolower($route[0])) . 'Controller';
+            $fullControllerName = 'app' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . $controllerName;
+            $actionName = 'action' . ucfirst(strtolower($route[1]));
+            if (class_exists($fullControllerName) && method_exists($fullControllerName, $actionName)) {
+                $controller = new ($fullControllerName)();
+                $controller->$actionName(...$getParameters);
+                return;
+            }
+        }
+
+        (new DefaultController())->actionError404();
     }
 
     private static function getFilesToFirstRequire(): array {
