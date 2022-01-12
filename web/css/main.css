@@ -1,0 +1,26 @@
+:root {
+    --header-height: 50px;
+}
+
+body {
+    height: 100vh;
+}
+
+header {
+    height: var(--header-height);
+    background-color: lightskyblue;
+}
+
+header #logo {
+    height: 40px;
+}
+
+.main {
+    height: calc(100% - var(--header-height));
+    padding: 0;
+    margin: 0;
+}
+
+.nav {
+    min-width: 350px;
+}
