@@ -12,8 +12,16 @@
         <img id="logo" src="img/logo.svg">
     </header>
     <div class="main row">
-        <div class="col-auto nav" style="background-color: darkgrey;">
-
+        <div class="col-auto navigation" style="background-color: darkgrey;">
+            <a href="#" class="navigation-item">
+                Поиск клиента
+            </a>
+            <a href="#" class="navigation-item">
+                Поиск банковского продукта
+            </a>
+            <a href="#" class="navigation-item">
+                Информация о банковских продуктах
+            </a>
         </div>
         <div class="col-auto">
             <main>
