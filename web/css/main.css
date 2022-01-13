@@ -24,6 +24,7 @@ header #logo {
 .navigation {
     min-width: 350px;
     padding: 0;
+    background-color: darkgrey;
 }
 
 .navigation-item {
@@ -35,8 +36,6 @@ header #logo {
     text-decoration: none;
     color: black;
     background-color: lightgrey;
-    transition-duration: 50ms;
-    transition-property: background-color;
 }
 
 .navigation-item:hover {

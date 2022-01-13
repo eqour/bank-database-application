@@ -12,7 +12,7 @@
         <img id="logo" src="img/logo.svg">
     </header>
     <div class="main row">
-        <div class="col-auto navigation" style="background-color: darkgrey;">
+        <div class="col-auto navigation">
             <a href="#" class="navigation-item">
                 Поиск клиента
             </a>
