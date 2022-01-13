@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\application\Application;
+use app\helpers\TextHelper;
 
 class Controller {
     public function name(): string {
@@ -12,7 +13,7 @@ class Controller {
     protected function render(string $view, array $params = []): void {
         extract($params, EXTR_SKIP);
         ob_start();
-        include(Application::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . strtolower($this->name()) . DIRECTORY_SEPARATOR . $view . '.php');
+        include(Application::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . TextHelper::convertCamelCaseToDash($this->name()) . DIRECTORY_SEPARATOR . $view . '.php');
         $content = ob_get_contents();
         ob_end_clean();
         $this->renderLayout('main', ['content' => $content]);

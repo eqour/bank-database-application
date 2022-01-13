@@ -3,6 +3,7 @@
 namespace app\application;
 
 use app\controllers\DefaultController;
+use app\helpers\TextHelper;
 
 class Application {
     public const APPLICATION_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
@@ -38,7 +39,7 @@ class Application {
                 && isset($route[1])
                 && is_string($route[0])
                 && is_string($route[1])) {
-            $controllerName = ucfirst(strtolower($route[0])) . 'Controller';
+            $controllerName = ucfirst(strtolower(TextHelper::convertDashToCamelCase($route[0]))) . 'Controller';
             $fullControllerName = 'app' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . $controllerName;
             $actionName = 'action' . ucfirst(strtolower($route[1]));
             if (class_exists($fullControllerName) && method_exists($fullControllerName, $actionName)) {
