@@ -21,6 +21,25 @@ header #logo {
     margin: 0;
 }
 
-.nav {
+.navigation {
     min-width: 350px;
+    padding: 0;
+}
+
+.navigation-item {
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    color: black;
+    background-color: lightgrey;
+    transition-duration: 50ms;
+    transition-property: background-color;
+}
+
+.navigation-item:hover {
+    color: black;
+    background-color: #efefef;
 }
