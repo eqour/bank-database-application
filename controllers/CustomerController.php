@@ -10,4 +10,8 @@ class CustomerController extends Controller {
     public function actionSearch() {
         return $this->render('search');
     }
+
+    public function actionInfo() {
+        return $this->render('info');
+    }
 }

@@ -21,7 +21,7 @@
             <a href="/banking-product/search" class="navigation-item">
                 Поиск банковского продукта
             </a>
-            <a href="/banking-product/info" class="navigation-item">
+            <a href="/banking-product/all" class="navigation-item">
                 Информация о банковских продуктах
             </a>
         </div>

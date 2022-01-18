@@ -10,6 +10,10 @@ class BankingProductController extends Controller {
     public function actionSearch() {
         return $this->render('search');
     }
+
+    public function actionAll() {
+        return $this->render('all');
+    }
     
     public function actionInfo() {
         return $this->render('info');
