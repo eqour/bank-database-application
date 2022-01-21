@@ -18,4 +18,8 @@ class BankingProductController extends Controller {
     public function actionInfo() {
         return $this->render('info');
     }
+    
+    public function actionRegistration() {
+        return $this->render('registration');
+    }
 }
