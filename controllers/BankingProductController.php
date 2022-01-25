@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\services\ServiceTypeService;
+
 class BankingProductController extends Controller {
     public function name(): string {
         return 'BankingProduct';
@@ -12,7 +14,9 @@ class BankingProductController extends Controller {
     }
 
     public function actionAll() {
-        return $this->render('all');
+        $service = new ServiceTypeService();
+        $products = $service->findAll();
+        return $this->render('all', ['products' => $products]);
     }
     
     public function actionInfo() {
