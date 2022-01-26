@@ -1,3 +1,9 @@
+<?php
+
+use app\widgets\PaginationWidget;
+
+?>
+
 <h1>Информация о банковских продуктах</h1>
 
 <?php if (count($products) == 0): ?>
@@ -26,4 +32,11 @@
             <?php } ?>
         </tbody>
     </table>
+    <?php 
+        (new PaginationWidget(
+            $paginationHelper->getAmountPages(),
+            $paginationHelper->getCurrentPage(),
+            2)
+        )->render();
+    ?>
 <?php endif; ?>

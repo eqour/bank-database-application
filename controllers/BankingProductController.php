@@ -13,10 +13,11 @@ class BankingProductController extends Controller {
         return $this->render('search');
     }
 
-    public function actionAll() {
+    public function actionAll(int $p = 0) {
         $service = new ServiceTypeService();
-        $products = $service->findAll();
-        return $this->render('all', ['products' => $products]);
+        $helper = $service->getPaginationHelper($p);
+        $products = $service->findAllInRange($helper->getStartRecordIndex(), $helper->getEndRecordIndex());
+        return $this->render('all', ['products' => $products, 'paginationHelper' => $helper]);
     }
     
     public function actionInfo() {

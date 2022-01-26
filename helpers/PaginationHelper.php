@@ -3,43 +3,38 @@
 namespace app\helpers;
 
 class PaginationHelper {
-    private string $pageAttribute;
+    private int $startRecordIndex;
+    private int $endRecordIndex;
     private int $amountPages;
     private int $currentPage;
-    private int $radius;
+    private int $recordsPerPage;
 
-    public function __construct(int $total, int $itemsPerPage, int $currentPage, int $radius, string $pageAttribute = 'p') {
-        $this->amountPages = (int)ceil((float)$total / (float)$itemsPerPage);
+    public function __construct(int $totalRecords, int $currentPage, int $recordsPerPage) {
         $this->currentPage = $currentPage;
-        $this->radius = $radius;
-        $this->pageAttribute = $pageAttribute;
+        $this->amountPages =(int)ceil((float)$totalRecords / (float)$recordsPerPage);
+        $this->startRecordIndex = $recordsPerPage * $this->currentPage;
+        $endIndex = $recordsPerPage * ($this->currentPage + 1) - 1;
+        $this->endRecordIndex = $endIndex >= $totalRecords ? $totalRecords - 1 : $endIndex;
+        $this->recordsPerPage = $recordsPerPage;
     }
 
-    public function render(): void {
-        ?><ul class="pagination"><?php
-        $this->renderElement('«', '?' . $this->pageAttribute . '=0');
-        for ($i = $this->calculateStartPage(); $i < $this->calculateEndPage(); $i++) {
-            $this->renderElement($i + 1, '?' . $this->pageAttribute . '=' . $i, $i == $this->currentPage);
-        }
-        $this->renderElement('»', '?' . $this->pageAttribute . '=' . $this->amountPages - 1);
-        ?></ul><?php
+    public function getStartRecordIndex(): int {
+        return $this->startRecordIndex;
     }
 
-    private function renderElement(string $content, string $href = "#", bool $active = false, bool $disabled = false): void {
-        ?>
-        <li class="page-item <?= ($active ? 'active' : '') ?>">
-            <a class="page-link <?= ($disabled ? 'disabled' : '') ?>" href="<?= htmlspecialchars($href) ?>">
-                <span><?= htmlspecialchars($content) ?></span>
-            </a>
-        </li>
-        <?php
+    public function getEndRecordIndex(): int {
+        return $this->endRecordIndex;
     }
 
-    private function calculateStartPage(): int {
-        return $this->currentPage < $this->radius ? 0 : $this->currentPage - $this->radius;
+    public function getAmountPages(): int {
+        return $this->amountPages;
     }
 
-    private function calculateEndPage(): int {
-        return $this->currentPage > $this->amountPages - $this->radius - 1 ? $this->amountPages : $this->currentPage + $this->radius + 1;
+    public function getCurrentPage(): int {
+        return $this->currentPage;
+    }
+
+    public function getRecordsPerPage(): int {
+        return $this->recordsPerPage;
     }
 }
