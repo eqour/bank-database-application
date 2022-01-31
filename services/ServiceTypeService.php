@@ -37,7 +37,8 @@ class ServiceTypeService {
                 $row['annual_rate'],
                 $row['replenishment'],
                 $row['withdrawal'],
-                (new ServiceTypeGroupService())->createServiceTypeGroup($row['group_id'], $row['group_name']));
+                (new ServiceTypeGroupService())->createServiceTypeGroup($row['group_id'], $row['group_name'])
+            );
         }
         return $serviceTypes;
     }
