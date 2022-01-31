@@ -55,7 +55,8 @@ class Application {
 
     private static function getFilesToFirstRequire(): array {
         return [
-            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'Controller.php'
+            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'Controller.php',
+            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'forms' . DIRECTORY_SEPARATOR . 'Form.php'
         ];
     }
 

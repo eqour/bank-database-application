@@ -37,4 +37,8 @@ class Controller {
         }
         return $includeString;
     }
+
+    protected function redirect(string $path, array $params = []): void {
+        header('Location: ' . $path . TextHelper::paramsToQuery($params));
+    }
 }

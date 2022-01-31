@@ -26,4 +26,23 @@ class TextHelper {
         }
         return $result;
     }
+
+    public static function paramsToQuery(array $params = []): string {
+        if (!isset($params) || count($params) === 0) {
+            return '';
+        } else {
+            $first = false;
+            $query = '';
+            foreach ($params as $key => $value) {
+                if ($first) {
+                    $query .= '&';
+                } else {
+                    $first = true;
+                    $query .= '?';
+                }
+                $query .= $key . '=' . $value;
+            }
+            return $query;
+        }
+    }
 }
