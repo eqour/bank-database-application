@@ -4,8 +4,7 @@ namespace app\services;
 
 use app\models\ServiceTypeGroup;
 
-class ServiceTypeGroupService
-{
+class ServiceTypeGroupService {
     public function createServiceTypeGroup(int $id, string $name): ServiceTypeGroup {
         $serviceTypeGroup = new ServiceTypeGroup();
         $serviceTypeGroup->id = $id;

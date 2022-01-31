@@ -4,8 +4,7 @@ namespace app\models;
 
 use DateTime;
 
-class Service
-{
+class Service {
     public string $account_number;
     public DateTime $open_date;
     public ?DateTime $actual_close_date;

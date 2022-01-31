@@ -8,8 +8,7 @@ use app\models\ServiceType;
 use app\models\ServiceTypeGroup;
 use PDO;
 
-class ServiceTypeService
-{
+class ServiceTypeService {
     public function createServiceType(int $id,
             string $name,
             ?string $description,

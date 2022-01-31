@@ -4,8 +4,7 @@ namespace app\models;
 
 use DateTime;
 
-class Operation
-{
+class Operation {
     public int $id;
     public DateTime $date;
     public float $amount;

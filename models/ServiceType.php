@@ -2,8 +2,7 @@
 
 namespace app\models;
 
-class ServiceType
-{
+class ServiceType {
     public int $id;
     public string $name;
     public ?string $description;
