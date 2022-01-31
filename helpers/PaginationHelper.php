@@ -12,9 +12,9 @@ class PaginationHelper {
     public function __construct(int $totalRecords, int $currentPage, int $recordsPerPage) {
         $this->currentPage = $currentPage;
         $this->amountPages =(int)ceil((float)$totalRecords / (float)$recordsPerPage);
-        $this->startRecordIndex = $recordsPerPage * $this->currentPage;
-        $endIndex = $recordsPerPage * ($this->currentPage + 1) - 1;
-        $this->endRecordIndex = $endIndex >= $totalRecords ? $totalRecords - 1 : $endIndex;
+        $this->startRecordIndex = $recordsPerPage * $this->currentPage + 1;
+        $endIndex = $recordsPerPage * ($this->currentPage + 1);
+        $this->endRecordIndex = $endIndex > $totalRecords ? $totalRecords : $endIndex;
         $this->recordsPerPage = $recordsPerPage;
     }
 
