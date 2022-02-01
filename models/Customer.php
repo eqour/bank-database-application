@@ -4,7 +4,7 @@ namespace app\models;
 
 use DateTime;
 
-class Client {
+class Customer {
     public const GENDER_FEMALE = 0;
     public const GENDER_MALE = 1;
 

@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\forms\CustomerSearchForm;
-use app\services\ClientService;
+use app\services\CustomerService;
 
 class CustomerController extends Controller {
     public function name(): string {
@@ -13,8 +13,8 @@ class CustomerController extends Controller {
     public function actionSearch() {
         $form = new CustomerSearchForm();
         if ($form->load($_POST) && $form->validate()) {
-            if (null !== $client = (new ClientService())->findByPassport($form->passport)) {
-                return $this->redirect(DIRECTORY_SEPARATOR . 'customer' . DIRECTORY_SEPARATOR . 'info', ['id' => $client->id]);
+            if (null !== $customer = (new CustomerService())->findByPassport($form->passport)) {
+                return $this->redirect(DIRECTORY_SEPARATOR . 'customer' . DIRECTORY_SEPARATOR . 'info', ['id' => $customer->id]);
             } else {
                 return $this->render('search', ['form' => $form, 'doesNotExist' => true]);
             }
@@ -23,11 +23,11 @@ class CustomerController extends Controller {
     }
 
     public function actionInfo(string $id = '') {
-        $service = new ClientService();
-        $client = $service->findById($id);
-        if (!isset($client)) {
+        $service = new CustomerService();
+        $customer = $service->findById($id);
+        if (!isset($customer)) {
             return $this->redirect('/customer/search');
         }
-        return $this->render('info', ['client' => $client]);
+        return $this->render('info', ['customer' => $customer]);
     }
 }

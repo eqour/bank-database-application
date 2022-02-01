@@ -10,7 +10,7 @@ class TestController extends Controller {
     }
 
     public function actionExamplequery() {
-        $result = Application::$pdo->query("SELECT * FROM `client`;")->fetchAll();
-        return $this->render('example-query', ['clients' => $result]);
+        $result = Application::$pdo->query("SELECT * FROM `customer`;")->fetchAll();
+        return $this->render('example-query', ['customers' => $result]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use app\services\ClientService;
+use app\services\CustomerService;
 
 ?>
 
@@ -15,27 +15,27 @@ use app\services\ClientService;
         <tbody>
             <tr>
                 <td>ФИО</td>
-                <td><?= htmlspecialchars($client->name) ?></td>
+                <td><?= htmlspecialchars($customer->name) ?></td>
             </tr>
             <tr>
                 <td>Паспорт</td>
-                <td><?= htmlspecialchars($client->passport) ?></td>
+                <td><?= htmlspecialchars($customer->passport) ?></td>
             </tr>
             <tr>
                 <td>Дата рождения</td>
-                <td><?= htmlspecialchars($client->birth_date->format('d.m.Y')) ?></td>
+                <td><?= htmlspecialchars($customer->birth_date->format('d.m.Y')) ?></td>
             </tr>
             <tr>
                 <td>Адрес проживания</td>
-                <td><?= htmlspecialchars($client->residence_address) ?></td>
+                <td><?= htmlspecialchars($customer->residence_address) ?></td>
             </tr>
             <tr>
                 <td>Телефон</td>
-                <td><?= htmlspecialchars($client->phone_number) ?></td>
+                <td><?= htmlspecialchars($customer->phone_number) ?></td>
             </tr>
             <tr>
                 <td>Пол</td>
-                <td><?= htmlspecialchars((new ClientService())->gender($client)) ?></td>
+                <td><?= htmlspecialchars((new CustomerService())->gender($customer)) ?></td>
             </tr>
         </tbody>
     </table>
