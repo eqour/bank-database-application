@@ -26,20 +26,24 @@ class ClientService {
         return $client;
     }
 
+    private function createClientFromFetchResult(array $result): Client {
+        return $this->createClient(
+            $result['id'],
+            $result['name'],
+            new DateTime($result['birth_date']),
+            $result['passport'],
+            $result['residence_address'],
+            $result['phone_number'],
+            $result['gender']
+        );
+    }
+
     public function findByPassport(string $passport): ?Client {
         $stm = Application::$pdo->prepare('SELECT * FROM `client` WHERE `passport` = :passport;');
         $stm->bindValue('passport', $passport);
         $stm->execute();
         $client = $stm->fetch();
-        return $client === false ? null : $this->createClient(
-            $client['id'],
-            $client['name'],
-            new DateTime($client['birth_date']),
-            $client['passport'],
-            $client['residence_address'],
-            $client['phone_number'],
-            $client['gender']
-        );  
+        return $client === false ? null : $this->createClientFromFetchResult($client);
     }
 
     public function findById(string $id): ?Client {
@@ -47,15 +51,7 @@ class ClientService {
         $stm->bindValue('id', $id);
         $stm->execute();
         $client = $stm->fetch();
-        return $client === false ? null : $this->createClient(
-            $client['id'],
-            $client['name'],
-            new DateTime($client['birth_date']),
-            $client['passport'],
-            $client['residence_address'],
-            $client['phone_number'],
-            $client['gender']
-        );  
+        return $client === false ? null : $this->createClientFromFetchResult($client);
     }
 
     public function gender(Client $client): string {
