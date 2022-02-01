@@ -1,3 +1,9 @@
+<?php
+
+use app\services\ClientService;
+
+?>
+
 <h1>Информация о клиенте</h1>
 
 <div class="mb-3">
@@ -9,27 +15,27 @@
         <tbody>
             <tr>
                 <td>ФИО</td>
-                <td>Иванов Иван Иванович</td>
+                <td><?= htmlspecialchars($client->name) ?></td>
             </tr>
             <tr>
                 <td>Паспорт</td>
-                <td>9475 865212</td>
+                <td><?= htmlspecialchars($client->passport) ?></td>
             </tr>
             <tr>
                 <td>Дата рождения</td>
-                <td>10.02.1989</td>
+                <td><?= htmlspecialchars($client->birth_date->format('d.m.Y')) ?></td>
             </tr>
             <tr>
                 <td>Адрес проживания</td>
-                <td>Лесная 10-4</td>
+                <td><?= htmlspecialchars($client->residence_address) ?></td>
             </tr>
             <tr>
                 <td>Телефон</td>
-                <td>+7 904 588 99 50</td>
+                <td><?= htmlspecialchars($client->phone_number) ?></td>
             </tr>
             <tr>
                 <td>Пол</td>
-                <td>Мужской</td>
+                <td><?= htmlspecialchars((new ClientService())->gender($client)) ?></td>
             </tr>
         </tbody>
     </table>

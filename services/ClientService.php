@@ -5,6 +5,7 @@ namespace app\services;
 use app\application\Application;
 use app\models\Client;
 use DateTime;
+use Exception;
 
 class ClientService {
     public function createClient(int $id,
@@ -39,5 +40,29 @@ class ClientService {
             $client['phone_number'],
             $client['gender']
         );  
+    }
+
+    public function findById(string $id): ?Client {
+        $stm = Application::$pdo->prepare('SELECT * FROM `client` WHERE `id` = :id;');
+        $stm->bindValue('id', $id);
+        $stm->execute();
+        $client = $stm->fetch();
+        return $client === false ? null : $this->createClient(
+            $client['id'],
+            $client['name'],
+            new DateTime($client['birth_date']),
+            $client['passport'],
+            $client['residence_address'],
+            $client['phone_number'],
+            $client['gender']
+        );  
+    }
+
+    public function gender(Client $client): string {
+        switch ($client->gender) {
+            case Client::GENDER_MALE: return 'Мужской';
+            case Client::GENDER_FEMALE: return 'Женский';
+            default: throw new Exception();
+        }
     }
 }

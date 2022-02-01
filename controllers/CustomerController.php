@@ -22,7 +22,12 @@ class CustomerController extends Controller {
         return $this->render('search', ['form' => $form]);
     }
 
-    public function actionInfo() {
-        return $this->render('info');
+    public function actionInfo(string $id = '') {
+        $service = new ClientService();
+        $client = $service->findById($id);
+        if (!isset($client)) {
+            return $this->redirect('/customer/search');
+        }
+        return $this->render('info', ['client' => $client]);
     }
 }
