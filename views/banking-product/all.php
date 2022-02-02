@@ -6,7 +6,7 @@ use app\widgets\PaginationWidget;
 
 <h1>Информация о банковских продуктах</h1>
 
-<?php if (count($products) == 0): ?>
+<?php if (count($products) === 0): ?>
     <p>Банковские продукты отсутствуют</p>
 <?php else: ?>
     <table class="table table-striped table-bordered">

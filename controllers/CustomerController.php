@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\forms\CustomerSearchForm;
 use app\services\CustomerService;
+use app\services\ServiceService;
 
 class CustomerController extends Controller {
     public function name(): string {
@@ -22,12 +23,13 @@ class CustomerController extends Controller {
         return $this->render('search', ['form' => $form]);
     }
 
-    public function actionInfo(string $id = '') {
-        $service = new CustomerService();
-        $customer = $service->findById($id);
+    public function actionInfo(string $id = '', int $p = 0) {
+        $customer = (new CustomerService())->findById($id);
+        $services = (new ServiceService())->findAllByCustomerIdForCustomer($id);
+        $helper = (new ServiceService())->getPaginationHelper($p, $customer->id);
         if (!isset($customer)) {
             return $this->redirect('/customer/search');
         }
-        return $this->render('info', ['customer' => $customer]);
+        return $this->render('info', ['customer' => $customer, 'services' => $services, 'paginationHelper' => $helper, 'appendParams' => ['id' => $id]]);
     }
 }

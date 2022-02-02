@@ -79,7 +79,7 @@ class ServiceTypeService {
     }
 
     public function getRecordsCount(): int {
-        $stm = Application::$pdo->prepare('SELECT COUNT(*) AS "count" FROM `service_type`;');
+        $stm = Application::$pdo->prepare('SELECT COUNT(*) AS `count` FROM `service_type`;');
         $stm->execute();
         $fetchResult = $stm->fetch();
         return $fetchResult['count'];

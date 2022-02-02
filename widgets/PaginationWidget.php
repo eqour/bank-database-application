@@ -2,26 +2,30 @@
 
 namespace app\widgets;
 
+use app\helpers\TextHelper;
+
 class PaginationWidget {
     private string $pageAttribute;
     private int $amountPages;
     private int $currentPage;
     private int $radius;
+    private array $hrefParameters;
 
-    public function __construct(int $amountPages, int $currentPage, int $radius, string $pageAttribute = 'p') {
+    public function __construct(int $amountPages, int $currentPage, int $radius, array $appendParams = [], string $pageAttribute = 'p') {
         $this->amountPages = $amountPages;
         $this->currentPage = $currentPage;
         $this->radius = $radius;
         $this->pageAttribute = $pageAttribute;
+        $this->hrefParameters = $appendParams;
     }
 
     public function render(): void {
         ?><ul class="pagination"><?php
-        $this->renderElement('«', '?' . $this->pageAttribute . '=0');
+        $this->renderElement('«', $this->generateQueryWithPageAttribute(0));
         for ($i = $this->calculateStartPage(); $i < $this->calculateEndPage(); $i++) {
-            $this->renderElement($i + 1, '?' . $this->pageAttribute . '=' . $i, $i == $this->currentPage);
+            $this->renderElement($i + 1, $this->generateQueryWithPageAttribute($i), $i == $this->currentPage);
         }
-        $this->renderElement('»', '?' . $this->pageAttribute . '=' . $this->amountPages - 1);
+        $this->renderElement('»', $this->generateQueryWithPageAttribute($this->amountPages - 1));
         ?></ul><?php
     }
 
@@ -33,6 +37,12 @@ class PaginationWidget {
             </a>
         </li>
         <?php
+    }
+
+    private function generateQueryWithPageAttribute(int $pageAttribute): string {
+        $parameters = $this->hrefParameters;
+        $parameters[$this->pageAttribute] = $pageAttribute;
+        return TextHelper::paramsToQuery($parameters);
     }
 
     private function calculateStartPage(): int {

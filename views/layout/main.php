@@ -25,7 +25,7 @@
                 Информация о банковских продуктах
             </a>
         </div>
-        <div class="col-auto">
+        <div class="col">
             <main>
                 <div class="container">
                     <?= $content ?>
