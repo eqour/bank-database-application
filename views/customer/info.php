@@ -3,6 +3,8 @@
 use app\services\CustomerService;
 use app\widgets\PaginationWidget;
 
+$this->registerJsFile('info');
+
 ?>
 
 <h1>Информация о клиенте</h1>
@@ -47,11 +49,11 @@ use app\widgets\PaginationWidget;
             <div class="row">
                 <div class="col-6 mb-3">
                     <label class="form-label">Номер счёта</label>
-                    <input class="form-control" type="text" maxlength="20" autofocus>
+                    <input class="form-control" type="text" name="account-number" maxlength="20" autofocus>
                 </div>
                 <div class="col-6 mb-3">
                     <label class="form-label">Статус</label>
-                    <select class="form-select">
+                    <select class="form-select" name="status">
                         <option value="1" selected>Все</option>
                         <option value="2">Открытые</option>
                         <option value="3">Закрытые</option>
