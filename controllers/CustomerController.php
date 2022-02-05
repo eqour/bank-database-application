@@ -2,7 +2,10 @@
 
 namespace app\controllers;
 
+use app\application\Application;
+use app\forms\BankingProductFilterForm;
 use app\forms\CustomerSearchForm;
+use app\helpers\PaginationHelper;
 use app\services\CustomerService;
 use app\services\ServiceService;
 
@@ -23,13 +26,29 @@ class CustomerController extends Controller {
         return $this->render('search', ['form' => $form]);
     }
 
-    public function actionInfo(string $id = '', int $p = 0) {
+    public function actionInfo(string $id = '', int $p = 0, ...$formParameters) {
         $customer = (new CustomerService())->findById($id);
-        $services = (new ServiceService())->findAllByCustomerIdForCustomer($id);
-        $helper = (new ServiceService())->getPaginationHelper($p, $customer->id);
         if (!isset($customer)) {
             return $this->redirect('/customer/search');
         }
-        return $this->render('info', ['customer' => $customer, 'services' => $services, 'paginationHelper' => $helper, 'appendParams' => ['id' => $id]]);
+        $filterForm = new BankingProductFilterForm();
+        if ($filterForm->load($_GET) && $filterForm->validate()) {
+            $from = $filterForm->dateFrom;
+            $till = $filterForm->dateTill;
+            $status = $filterForm->status;
+            $accountNumber = $filterForm->accountNumber;
+        } else {
+            $from = $till = $status = $accountNumber = null;
+        }
+        $serviceService = new ServiceService();
+        $services = $serviceService->findAllByCustomerIdForCustomerAndFilter($id, $from, $till, $status, $accountNumber);
+        $helper = new PaginationHelper(count($services), $p, Application::$maxRecordsPerPage);
+        return $this->render('info', [
+            'customer' => $customer,
+            'services' => $services,
+            'paginationHelper' => $helper,
+            'appendFormParams' => ['id' => $id],
+            'appendPaginationParams' => $formParameters + ['id' => $id],
+            'form' => $filterForm]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use app\helpers\FormHelper;
 use app\services\CustomerService;
 use app\widgets\PaginationWidget;
 
@@ -10,7 +11,7 @@ $this->registerJsFile('info');
 <h1>Информация о клиенте</h1>
 
 <div class="mb-3">
-    <button class="btn btn-secondary mb-3">Открыть банковский продукт</button>
+    <a href="/banking-product/registration?id=<?= htmlspecialchars($customer->id) ?>" class="btn btn-secondary mb-3">Открыть банковский продукт</a>
 </div>
 <div class="row mb-3">
     <div class="col mb-3">
@@ -45,28 +46,33 @@ $this->registerJsFile('info');
         </table>
     </div>
     <div class="col mb-3">
-        <form class="form">
+        <form class="form" method="GET">
             <div class="row">
                 <div class="col-6 mb-3">
                     <label class="form-label">Номер счёта</label>
-                    <input class="form-control" type="text" name="account-number" maxlength="20" autofocus>
+                    <input class="form-control <?= FormHelper::invalidClass($form, 'accountNumber') ?>" value="<?= $form->getField('accountNumber') ?>" name="<?= FormHelper::fieldName($form, 'accountNumber') ?>" type="text" maxlength="20" autofocus>
+                    <?= FormHelper::invalidFeedback($form, 'accountNumber') ?>
                 </div>
                 <div class="col-6 mb-3">
                     <label class="form-label">Статус</label>
-                    <select class="form-select" name="status">
-                        <option value="1" selected>Все</option>
-                        <option value="2">Открытые</option>
-                        <option value="3">Закрытые</option>
+                    <select class="form-select <?= FormHelper::invalidClass($form, 'status') ?>" name="<?= FormHelper::fieldName($form, 'status') ?>">
+                        <option value="0" <?= $form->getField('status') === '0' ? 'selected' : '' ?>>Все</option>
+                        <option value="1" <?= $form->getField('status') === '1' ? 'selected' : '' ?>>Открытые</option>
+                        <option value="2" <?= $form->getField('status') === '2' ? 'selected' : '' ?>>Закрытые</option>
                     </select>
+                    <?= FormHelper::invalidFeedback($form, 'status') ?>
                 </div>
                 <div class="col-6 mb-3">
                     <label class="form-label">Дата открытия: от</label>
-                    <input class="form-control" type="date">
+                    <input class="form-control <?= FormHelper::invalidClass($form, 'from') ?>" value="<?= $form->getField('from') ?>" name="<?= FormHelper::fieldName($form, 'from') ?>" type="date">
+                    <?= FormHelper::invalidFeedback($form, 'from') ?>
                 </div>
                 <div class="col-6 mb-3">
                     <label class="form-label">Дата открытия: до</label>
-                    <input class="form-control" type="date">
+                    <input class="form-control <?= FormHelper::invalidClass($form, 'till') ?>" value="<?= $form->getField('till') ?>" name="<?= FormHelper::fieldName($form, 'till') ?>" type="date">
+                    <?= FormHelper::invalidFeedback($form, 'till') ?>
                 </div>
+                <?= FormHelper::generateGetParameters($appendFormParams); ?>
                 <div class="col-12 mb-3">
                     <button class="btn btn-secondary">Найти</button>
                 </div>
@@ -101,7 +107,7 @@ $this->registerJsFile('info');
             $paginationHelper->getAmountPages(),
             $paginationHelper->getCurrentPage(),
             2,
-            $appendParams)
+            $appendPaginationParams)
         )->render();
     ?>
 <?php endif; ?>

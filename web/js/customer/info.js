@@ -1,14 +1,14 @@
 $(window).ready(function () {
     updateStatusInput();
-    $('[name=account-number]').on('input', updateStatusInput);
+    $('[name="BankingProductFilterForm\[accountNumber\]"]').on('input', updateStatusInput);
 });
 
 function updateStatusInput() {
-    const isEmpty = $('[name=account-number]').val() === '';
+    const isEmpty = $('[name="BankingProductFilterForm\[accountNumber\]"]').val() === '';
     if (isEmpty) {
-        $('[name=status]').removeAttr('disabled');
+        $('[name="BankingProductFilterForm\[status\]"]').removeAttr('disabled');
     } else {
-        $('[name=status]').attr('disabled', '');
-        $('[name=status]').prop('selectedIndex', 0);
+        $('[name="BankingProductFilterForm\[status\]"]').attr('disabled', '');
+        $('[name="BankingProductFilterForm\[status\]"]').prop('selectedIndex', 0);
     }
 }

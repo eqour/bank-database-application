@@ -2,8 +2,6 @@
 
 namespace app\widgets;
 
-use app\helpers\TextHelper;
-
 class PaginationWidget {
     private string $pageAttribute;
     private int $amountPages;
@@ -42,7 +40,7 @@ class PaginationWidget {
     private function generateQueryWithPageAttribute(int $pageAttribute): string {
         $parameters = $this->hrefParameters;
         $parameters[$this->pageAttribute] = $pageAttribute;
-        return TextHelper::paramsToQuery($parameters);
+        return '?' . http_build_query($parameters);
     }
 
     private function calculateStartPage(): int {
