@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\forms\BankingProductSearchForm;
+use app\services\ServiceService;
 use app\services\ServiceTypeService;
 
 class BankingProductController extends Controller {
@@ -10,7 +12,15 @@ class BankingProductController extends Controller {
     }
 
     public function actionSearch() {
-        return $this->render('search');
+        $form = new BankingProductSearchForm();
+        if ($form->load($_POST) && $form->validate()) {
+            if (null !== $bankingProduct = (new ServiceService())->findByAccountNumber($form->accountNumber)) {
+                return $this->redirect(DIRECTORY_SEPARATOR . 'banking-product' . DIRECTORY_SEPARATOR . 'info', ['id' => $bankingProduct->account_number]);
+            } else {
+                return $this->render('search', ['form' => $form, 'doesNotExist' => true]);
+            }
+        }
+        return $this->render('search', ['form' => $form]);
     }
 
     public function actionAll(int $p = 0) {

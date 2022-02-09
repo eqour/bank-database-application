@@ -11,6 +11,21 @@ use DateTime;
 use PDO;
 
 class ServiceService {
+    public function findByAccountNumber(string $accountNumber): ?Service {
+        $stm = Application::$pdo->prepare('SELECT * FROM `service` WHERE `account_number` = :accountnumber;');
+        $stm->bindValue('accountnumber', $accountNumber);
+        $stm->execute();
+        $bankingProduct = $stm->fetch();
+
+        if ($bankingProduct === false) {
+            return null;
+        } else {
+            $service = new Service();
+            $service->account_number = $bankingProduct['account_number'];
+            return $service;
+        }
+    }
+
     public function findAllByCustomerIdForCustomer(string $customerId): array {
         $stm = Application::$pdo->prepare('SELECT
             `service`.`account_number` AS `account_number`,
