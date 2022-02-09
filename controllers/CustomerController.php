@@ -29,7 +29,7 @@ class CustomerController extends Controller {
     public function actionInfo(string $id = '', int $p = 0, ...$formParameters) {
         $customer = (new CustomerService())->findById($id);
         if (!isset($customer)) {
-            return $this->redirect('/customer/search');
+            return $this->redirect(DIRECTORY_SEPARATOR . 'customer' . DIRECTORY_SEPARATOR . 'search');
         }
         $filterForm = new BankingProductFilterForm();
         if ($filterForm->load($_GET) && $filterForm->validate()) {
