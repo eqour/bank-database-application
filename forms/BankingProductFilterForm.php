@@ -5,8 +5,7 @@ namespace app\forms;
 use DateTime;
 use Throwable;
 
-class BankingProductFilterForm extends Form
-{
+class BankingProductFilterForm extends Form {
     public const STATUS_ALL = 0;
     public const STATUS_OPEN = 1;
     public const STATUS_CLOSED = 2;
