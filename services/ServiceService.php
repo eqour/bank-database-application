@@ -11,19 +11,69 @@ use DateTime;
 use PDO;
 
 class ServiceService {
+    function createService(string $account_number,
+    DateTime $open_date,
+    ?DateTime $actual_close_date,
+    ?DateTime $planned_close_date,
+    float $initial_amount,
+    ?string $purpose,
+    ServiceType $service_type): Service {
+        $service = new Service();
+        $service->account_number = $account_number;
+        $service->open_date = $open_date;
+        $service->actual_close_date = $actual_close_date;
+        $service->planned_close_date = $planned_close_date;
+        $service->initial_amount = $initial_amount;
+        $service->purpose = $purpose;
+        $service->service_type = $service_type;
+        return $service;
+    }
+
+    private function createServiceFromFetchResult(array $result): Service {
+        return $this->createService(
+            $result['account_number'],
+            isset($result['open_date']) ? new DateTime($result['open_date']) : null,
+            isset($result['actual_close_date']) ? new DateTime($result['actual_close_date']) : null,
+            isset($result['planned_close_date']) ? new DateTime($result['planned_close_date']) : null,
+            $result['initial_amount'],
+            $result['purpose'],
+            (new ServiceTypeService())->createServiceType(
+                $result['service_type_id'],
+                $result['service_type_name'],
+                $result['service_type_description'],
+                $result['service_type_annual_rate'],
+                $result['service_type_replensihment'],
+                $result['service_type_withdrawal'],
+                (new ServiceTypeGroupService())->createServiceTypeGroup(
+                    $result['type_group_id'],
+                    $result['type_group_name']
+                )
+            )
+        );
+    }
+
     public function findByAccountNumber(string $accountNumber): ?Service {
-        $stm = Application::$pdo->prepare('SELECT * FROM `service` WHERE `account_number` = :accountnumber;');
+        $stm = Application::$pdo->prepare('SELECT
+            `service`.`account_number`,
+            `service`.`open_date`,
+            `service`.`actual_close_date`,
+            `service`.`planned_close_date`,
+            `service`.`initial_amount`,
+            `service`.`purpose`,
+            `service_type`.`id` AS `service_type_id`,
+            `service_type`.`name` AS `service_type_name`,
+            `service_type`.`description` AS `service_type_description`,
+            `service_type`.`annual_rate` AS `service_type_annual_rate`,
+            `service_type`.`replenishment` AS `service_type_replensihment`,
+            `service_type`.`withdrawal` AS `service_type_withdrawal`,
+            `service_type_group`.`id` AS `type_group_id`,
+            `service_type_group`.`name` AS `type_group_name`
+            FROM `service` INNER JOIN (`service_type` INNER JOIN `service_type_group` ON `service_type`.`service_type_group_id` = `service_type_group`.`id`) ON `service`.`service_type_id` = `service_type`.`id`
+            WHERE `account_number` = :accountnumber;');
         $stm->bindValue('accountnumber', $accountNumber);
         $stm->execute();
-        $bankingProduct = $stm->fetch();
-
-        if ($bankingProduct === false) {
-            return null;
-        } else {
-            $service = new Service();
-            $service->account_number = $bankingProduct['account_number'];
-            return $service;
-        }
+        $service = $stm->fetch();
+        return $service === false ? null : $this->createServiceFromFetchResult($service);
     }
 
     public function findAllByCustomerIdForCustomer(string $customerId): array {

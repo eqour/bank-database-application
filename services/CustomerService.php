@@ -46,6 +46,16 @@ class CustomerService {
         return $customer === false ? null : $this->createCustomerFromFetchResult($customer);
     }
 
+    public function findByBankingProductAccountNumber(string $accountNumber): ?Customer {
+        $stm = Application::$pdo->prepare('SELECT *
+            FROM `customer` INNER JOIN (`contract` INNER JOIN `service` ON `service`.`contract_id` = `contract`.`id`) ON `contract`.`customer_id` = `customer`.`id`
+            WHERE `service`.`account_number` = :accountnumber;');
+        $stm->bindValue('accountnumber', $accountNumber);
+        $stm->execute();
+        $customer = $stm->fetch();
+        return $customer === false ? null : $this->createCustomerFromFetchResult($customer);
+    }
+
     public function findById(string $id): ?Customer {
         $stm = Application::$pdo->prepare('SELECT * FROM `customer` WHERE `id` = :id;');
         $stm->bindValue('id', $id);

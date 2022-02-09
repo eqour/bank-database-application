@@ -9,35 +9,35 @@
         <tbody>
             <tr>
                 <td>Номер счёта</td>
-                <td>58489610203120184960</td>
+                <td><?= htmlspecialchars($product->account_number) ?></td>
             </tr>
             <tr>
                 <td>Тип продукта</td>
-                <td>вклад</td>
+                <td><?= htmlspecialchars($product->service_type->service_type_group->name) ?></td>
             </tr>
             <tr>
                 <td>Дата открытия</td>
-                <td>01.01.2022</td>
+                <td><?= htmlspecialchars($product->open_date->format('d.m.Y')) ?></td>
             </tr>
             <tr>
                 <td>Планируемая дата закрытия</td>
-                <td>01.05.2022</td>
+                <td><?= htmlspecialchars(isset($product->planned_close_date) ? $product->planned_close_date->format('d.m.Y') : '-') ?></td>
             </tr>
             <tr>
                 <td>Фактическая дата закрытия</td>
-                <td>-</td>
+                <td><?= htmlspecialchars(isset($product->actual_close_date) ? $product->actual_close_date->format('d.m.Y') : '-') ?></td>
             </tr>
             <tr>
                 <td>Годовая ставка, %</td>
-                <td>3</td>
+                <td><?= htmlspecialchars($product->service_type->annual_rate) ?></td>
             </tr>
             <tr>
                 <td>Начальная сумма по счёту</td>
-                <td>5 000</td>
+                <td><?= htmlspecialchars($product->initial_amount) ?></td>
             </tr>
             <tr>
                 <td>Клиент</td>
-                <td>Иванов Иван Иванович</td>
+                <td><?= htmlspecialchars($customer->name) ?></td>
             </tr>
         </tbody>
     </table>
