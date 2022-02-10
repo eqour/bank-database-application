@@ -100,6 +100,7 @@ class ServiceService {
     public function findAllByCustomerIdForCustomerAndFilter(string $customerId, ?DateTime $from, ?DateTime $till, ?int $status, ?string $accountNumber, int $min, int $max): array {
         $stm = Application::$pdo->prepare('SELECT
             `service`.`account_number` AS `account_number`,
+            `service`.`open_date`,
             `service_type`.`name` AS `name`
             FROM (`service` INNER JOIN (`contract` INNER JOIN `customer` ON `contract`.`customer_id` = `customer`.`id`) ON `service`.`contract_id` = `contract`.`id`) INNER JOIN `service_type` ON `service`.`service_type_id` = `service_type`.`id`
             WHERE
@@ -108,6 +109,7 @@ class ServiceService {
             '.(!isset($accountNumber) && isset($from) ? ('AND `service`.`open_date` >= "'.$from->format('Y-m-d').'" ') : '').'
             '.(!isset($accountNumber) && isset($till) ? ('AND `service`.`open_date` <= "'.$till->format('Y-m-d').'" ') : '').'
             '.(!isset($accountNumber) && isset($status) && $status !== BankingProductFilterForm::STATUS_ALL ? ('AND `service`.`actual_close_date` IS '.($status === BankingProductFilterForm::STATUS_OPEN ? 'NULL' : 'NOT NULL')) : '').'
+            ORDER BY `service`.`open_date` DESC
             LIMIT :offset, :amount;');
         $stm->bindValue('customerid', $customerId, PDO::PARAM_INT);
         $stm->bindValue('offset', $min - 1, PDO::PARAM_INT);

@@ -67,6 +67,7 @@ class ServiceTypeService {
             `replenishment`,
             `withdrawal`
             FROM `service_type` INNER JOIN `service_type_group` ON `service_type`.`service_type_group_id` = `service_type_group`.`id`
+            ORDER BY `service_type`.`id`
             LIMIT :offset, :amount;');
         $stm->bindValue('offset', $min - 1, PDO::PARAM_INT);
         $stm->bindValue('amount', $max - ($min - 1), PDO::PARAM_INT);

@@ -96,7 +96,7 @@ $this->registerJsFile('info');
                 <?php foreach ($services as $service) { ?>
                     <tr>
                         <td><?= htmlentities($service->service_type->name) ?></td>
-                        <td><a href="/banking-product/info?id=<?= htmlentities($service->account_number) ?>"><?= htmlentities($service->account_number) ?></a></td>
+                        <td><a href="/banking-product/info?account=<?= htmlentities($service->account_number) ?>"><?= htmlentities($service->account_number) ?></a></td>
                     </tr>
                 <?php } ?>
             </tbody>
