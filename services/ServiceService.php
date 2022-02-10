@@ -97,7 +97,7 @@ class ServiceService {
         return $services;
     }
     
-    public function findAllByCustomerIdForCustomerAndFilter(string $customerId, ?DateTime $from, ?DateTime $till, ?int $status, ?string $accountNumber): array {
+    public function findAllByCustomerIdForCustomerAndFilter(string $customerId, ?DateTime $from, ?DateTime $till, ?int $status, ?string $accountNumber, int $min, int $max): array {
         $stm = Application::$pdo->prepare('SELECT
             `service`.`account_number` AS `account_number`,
             `service_type`.`name` AS `name`
@@ -107,8 +107,11 @@ class ServiceService {
             '.(isset($accountNumber) ? ('AND `service`.`account_number` = "'.$accountNumber.'" ') : '').'
             '.(!isset($accountNumber) && isset($from) ? ('AND `service`.`open_date` >= "'.$from->format('Y-m-d').'" ') : '').'
             '.(!isset($accountNumber) && isset($till) ? ('AND `service`.`open_date` <= "'.$till->format('Y-m-d').'" ') : '').'
-            '.(!isset($accountNumber) && isset($status) && $status !== BankingProductFilterForm::STATUS_ALL ? ('AND `service`.`actual_close_date` IS '.($status === BankingProductFilterForm::STATUS_OPEN ? 'NULL' : 'NOT NULL')) : '').';');
+            '.(!isset($accountNumber) && isset($status) && $status !== BankingProductFilterForm::STATUS_ALL ? ('AND `service`.`actual_close_date` IS '.($status === BankingProductFilterForm::STATUS_OPEN ? 'NULL' : 'NOT NULL')) : '').'
+            LIMIT :offset, :amount;');
         $stm->bindValue('customerid', $customerId, PDO::PARAM_INT);
+        $stm->bindValue('offset', $min - 1, PDO::PARAM_INT);
+        $stm->bindValue('amount', $max - ($min - 1), PDO::PARAM_INT);
         $stm->execute();
         $result = $stm->fetchAll();
         
@@ -131,6 +134,21 @@ class ServiceService {
         $stm = Application::$pdo->prepare('SELECT COUNT(*) AS `count`
             FROM (`service` INNER JOIN (`contract` INNER JOIN `customer` ON `contract`.`customer_id` = `customer`.`id`) ON `service`.`contract_id` = `contract`.`id`) INNER JOIN  `service_type` ON `service`.`service_type_id` = `service_type`.`id`
             WHERE `customer`.`id` = :customerid;');
+        $stm->bindValue('customerid', $customerId, PDO::PARAM_INT);
+        $stm->execute();
+        $fetchResult = $stm->fetch();
+        return $fetchResult['count'];
+    }
+
+    public function getRecordsCountByCustomerIdForCustomerAndFilter(string $customerId, ?DateTime $from, ?DateTime $till, ?int $status, ?string $accountNumber): int {
+        $stm = Application::$pdo->prepare('SELECT COUNT(*) AS `count`
+            FROM (`service` INNER JOIN (`contract` INNER JOIN `customer` ON `contract`.`customer_id` = `customer`.`id`) ON `service`.`contract_id` = `contract`.`id`) INNER JOIN `service_type` ON `service`.`service_type_id` = `service_type`.`id`
+            WHERE
+            `customer`.`id` = :customerid
+            '.(isset($accountNumber) ? ('AND `service`.`account_number` = "'.$accountNumber.'" ') : '').'
+            '.(!isset($accountNumber) && isset($from) ? ('AND `service`.`open_date` >= "'.$from->format('Y-m-d').'" ') : '').'
+            '.(!isset($accountNumber) && isset($till) ? ('AND `service`.`open_date` <= "'.$till->format('Y-m-d').'" ') : '').'
+            '.(!isset($accountNumber) && isset($status) && $status !== BankingProductFilterForm::STATUS_ALL ? ('AND `service`.`actual_close_date` IS '.($status === BankingProductFilterForm::STATUS_OPEN ? 'NULL' : 'NOT NULL')) : '').';');
         $stm->bindValue('customerid', $customerId, PDO::PARAM_INT);
         $stm->execute();
         $fetchResult = $stm->fetch();

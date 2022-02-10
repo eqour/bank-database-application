@@ -41,8 +41,8 @@ class CustomerController extends Controller {
             $from = $till = $status = $accountNumber = null;
         }
         $serviceService = new ServiceService();
-        $services = $serviceService->findAllByCustomerIdForCustomerAndFilter($id, $from, $till, $status, $accountNumber);
-        $helper = new PaginationHelper(count($services), $p, Application::$maxRecordsPerPage);
+        $helper = new PaginationHelper($serviceService->getRecordsCountByCustomerIdForCustomerAndFilter($id, $from, $till, $status, $accountNumber), $p, Application::$maxRecordsPerPage);
+        $services = $serviceService->findAllByCustomerIdForCustomerAndFilter($id, $from, $till, $status, $accountNumber, $helper->getStartRecordIndex(), $helper->getEndRecordIndex());
         return $this->render('info', [
             'customer' => $customer,
             'services' => $services,
