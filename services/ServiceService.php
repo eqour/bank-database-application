@@ -29,7 +29,7 @@ class ServiceService {
         return $service;
     }
 
-    private function createServiceFromFetchResult(array $result): Service {
+    public function createServiceFromFetchResult(array $result): Service {
         return $this->createService(
             $result['account_number'],
             isset($result['open_date']) ? new DateTime($result['open_date']) : null,
