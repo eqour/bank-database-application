@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\forms\TransactionPreformForm;
 use app\services\OperationService;
+use app\services\ServiceService;
 
 class TransactionController extends Controller {
     public function name(): string {
@@ -15,7 +17,14 @@ class TransactionController extends Controller {
         return $this->render('info', ['operation' => $operation]);
     }
 
-    public function actionPreform() {
-        return $this->render('preform');
+    public function actionPreform(string $account = '') {
+        $serviceService = new ServiceService();
+        $service = $serviceService->findByAccountNumber($account);
+        if (!isset($service)) {
+            $this->redirect(DIRECTORY_SEPARATOR);
+        }
+        $form = new TransactionPreformForm();
+        $form->accountNumber = $service->account_number;
+        return $this->render('preform', ['form' => $form]);
     }
 }

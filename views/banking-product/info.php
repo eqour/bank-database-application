@@ -8,7 +8,7 @@ use app\widgets\PaginationWidget;
 <h1>Информация о банковском продукте</h1>
 
 <div class="mb-3">
-    <button class="btn btn-secondary mb-3">Новая операция</button>
+    <a href="/transaction/preform?account=<?= $product->account_number ?>" class="btn btn-secondary mb-3">Новая операция</a>
 </div>
 <div class="row mb-3">
     <div class="col mb-3">
