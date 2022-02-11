@@ -33,6 +33,34 @@ class OperationService {
         );
     }
 
+    public function findById(string $id): ?Operation {
+        $stm = Application::$pdo->prepare('SELECT
+            `operation`.`id`,
+            `operation`.`date`,
+            `operation`.`amount`,
+            `operation`.`description`,
+            `service`.`account_number`,
+            `service`.`open_date`,
+            `service`.`actual_close_date`,
+            `service`.`planned_close_date`,
+            `service`.`initial_amount`,
+            `service`.`purpose`,
+            `service_type`.`id` AS `service_type_id`,
+            `service_type`.`name` AS `service_type_name`,
+            `service_type`.`description` AS `service_type_description`,
+            `service_type`.`annual_rate` AS `service_type_annual_rate`,
+            `service_type`.`replenishment` AS `service_type_replensihment`,
+            `service_type`.`withdrawal` AS `service_type_withdrawal`,
+            `service_type_group`.`id` AS `type_group_id`,
+            `service_type_group`.`name` AS `type_group_name`
+            FROM `operation` INNER JOIN (`service` INNER JOIN (`service_type` INNER JOIN `service_type_group` ON `service_type`.`service_type_group_id` = `service_type_group`.`id`) ON `service`.`service_type_id` = `service_type`.`id`) ON `operation`.`service_account_number` = `service`.`account_number`
+            WHERE `operation`.`id` = :id;');
+        $stm->bindValue('id', $id);
+        $stm->execute();
+        $operation = $stm->fetch();
+        return $operation === false ? null : $this->createOperationFromFetchResult($operation);
+    }
+
     public function findAllByAccountNumber(string $accountNumber): array {
         $stm = Application::$pdo->prepare('SELECT
             `operation`.`id`,

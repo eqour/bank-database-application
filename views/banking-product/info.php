@@ -84,7 +84,7 @@ use app\widgets\PaginationWidget;
             <tbody>
                 <?php foreach ($operations as $operation) { ?>
                     <tr>
-                        <td><?= htmlentities($operation->date->format('d.m.Y')) ?></td>
+                        <td><a href="/transaction/info?id=<?= $operation->id ?>"><?= htmlentities($operation->date->format('d.m.Y')) ?></a></td>
                         <td><?= htmlentities($operation->amount) ?></td>
                     </tr>
                 <?php } ?>
