@@ -9,7 +9,7 @@ use app\helpers\FormHelper;
 <form class="form" method="POST">
     <div class="mb-3">
         <label class="form-label">Счёт банковского продукта</label>
-        <input class="form-control" value="<?= $form->getField('accountNumber') ?>" name="<?= FormHelper::fieldName($form, 'accountNumber') ?>" type="text" disabled>
+        <input class="form-control" value="<?= $form->getField('accountNumber') ?>" name="<?= FormHelper::fieldName($form, 'accountNumber') ?>" type="text" readonly>
         <?= FormHelper::invalidFeedback($form, 'accountNumber') ?>
     </div>
     <div class="mb-3">
@@ -19,7 +19,7 @@ use app\helpers\FormHelper;
     </div>
     <div class="mb-3">
         <label class="form-label">Описание операции</label>
-        <textarea class="form-control <?= FormHelper::invalidClass($form, 'description') ?>" value="<?= $form->getField('description') ?>" name="<?= FormHelper::fieldName($form, 'description') ?>" type="text" maxlength="100"></textarea>
+        <textarea class="form-control <?= FormHelper::invalidClass($form, 'description') ?>" name="<?= FormHelper::fieldName($form, 'description') ?>" type="text" maxlength="100"><?= $form->getField('description') ?></textarea>
         <?= FormHelper::invalidFeedback($form, 'description') ?>
     </div>
     <div class="mb-3">

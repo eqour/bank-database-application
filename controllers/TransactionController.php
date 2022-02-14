@@ -24,6 +24,11 @@ class TransactionController extends Controller {
             $this->redirect(DIRECTORY_SEPARATOR);
         }
         $form = new TransactionPreformForm();
+        if ($form->load($_POST) && $form->validate()) {
+            $operationService = new OperationService();
+            $operationService->preform($form->accountNumber, $form->amount, $form->description);
+            $this->redirect(DIRECTORY_SEPARATOR . 'banking-product' . DIRECTORY_SEPARATOR . 'info', ['account' => $account]);
+        }
         $form->accountNumber = $service->account_number;
         return $this->render('preform', ['form' => $form]);
     }

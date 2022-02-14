@@ -144,4 +144,16 @@ class OperationService {
         $fetchResult = $stm->fetch();
         return $fetchResult['count'];
     }
+
+    public function preform(string $accountNumber, float $amount, ?string $description = null): void {
+        $stm = Application::$pdo->prepare('INSERT INTO `operation` (`date`, `amount`, `service_account_number`, `description`)
+            VALUES (:date, :amount, :accountnumber, :description);');
+        
+        $stm->bindValue('accountnumber', $accountNumber);
+        $stm->bindValue('date', date('Y-m-d H:i:s'));
+        $stm->bindValue('amount', $amount);
+        $stm->bindValue('description', $description);
+
+        $stm->execute();
+    }
 }
