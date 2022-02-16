@@ -156,4 +156,14 @@ class ServiceService {
         $fetchResult = $stm->fetch();
         return $fetchResult['count'];
     }
+
+    public function getCurrentAccountAmount(string $accountNumber): float {
+        $stm = Application::$pdo->prepare('SELECT (`service`.`initial_amount` + IF(SUM(`operation`.`amount`) IS NULL, 0, SUM(`operation`.`amount`))) AS `sum`
+            FROM `service` LEFT JOIN `operation` ON `service`.`account_number` = `operation`.`service_account_number`
+            WHERE `service`.`account_number` = :accountnumber;');
+        $stm->bindValue('accountnumber', $accountNumber);
+        $stm->execute();
+        $fetchResult = $stm->fetch();
+        return $fetchResult['sum'];
+    }
 }

@@ -44,6 +44,10 @@ use app\widgets\PaginationWidget;
                     <td><?= htmlspecialchars($product->initial_amount) ?></td>
                 </tr>
                 <tr>
+                    <td>Текущая сумма по счёту</td>
+                    <td><?= htmlspecialchars($currentAccountAmount) ?></td>
+                </tr>
+                <tr>
                     <td>Клиент</td>
                     <td><?= htmlspecialchars($customer->name) ?></td>
                 </tr>

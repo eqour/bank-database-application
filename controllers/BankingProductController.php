@@ -51,10 +51,12 @@ class BankingProductController extends Controller {
             $from = $till = null;
         }
         $operationService = new OperationService();
+        $currentAccountAmount = $serviceService->getCurrentAccountAmount($product->account_number);
         $helper = new PaginationHelper($operationService->getRecordsCountByAccountNumberAndFilter($account, $from, $till), $p, Application::$maxRecordsPerPage);
         $operations = $operationService->findAllByAccountNumberAndFilter($account, $from, $till, $helper->getStartRecordIndex(), $helper->getEndRecordIndex());
         return $this->render('info', [
             'product' => $product,
+            'currentAccountAmount' => $currentAccountAmount,
             'customer' => $customer,
             'operations' => $operations,
             'paginationHelper' => $helper,
