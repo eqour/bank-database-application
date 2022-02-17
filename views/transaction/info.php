@@ -4,7 +4,7 @@
     <p>Операция не найдена</p>
 <?php else: ?>
     <div class="mb-3">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-sm">
             <caption>Операция по счёту банковского продукта</caption>
             <tbody>
                 <tr>

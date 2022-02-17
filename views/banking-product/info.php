@@ -20,9 +20,9 @@ use app\widgets\PaginationWidget;
         <?php endif; ?> 
     <?php endif; ?>
 </div>
-<div class="row mb-3">
+<div class="row">
     <div class="col mb-3">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-sm">
             <caption>Банковский продукт</caption>
             <tbody>
                 <tr>
@@ -59,7 +59,7 @@ use app\widgets\PaginationWidget;
                 </tr>
                 <tr>
                     <td>Клиент</td>
-                    <td><?= htmlspecialchars($customer->name) ?></td>
+                    <td><a href="/customer/info?id=<?= htmlspecialchars($customer->id) ?>"><?= htmlspecialchars($customer->name) ?></a></td>
                 </tr>
             </tbody>
         </table>
@@ -87,7 +87,7 @@ use app\widgets\PaginationWidget;
     <p>Отсутствуют операции по счёту</p>
 <?php else: ?>
     <div class="mb-3">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-sm">
             <caption>Операции по банковскому продукту</caption>
             <thead>
                 <tr>

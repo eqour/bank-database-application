@@ -8,7 +8,7 @@ use app\helpers\TextHelper;
 class Application {
     public const APPLICATION_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
 
-    public static int $maxRecordsPerPage = 10;
+    public static int $maxRecordsPerPage = 5;
     public static \PDO $pdo;
 
     public static function run(): void {

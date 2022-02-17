@@ -13,9 +13,9 @@ $this->registerJsFile('info');
 <div class="mb-3">
     <a href="/banking-product/registration?id=<?= htmlspecialchars($customer->id) ?>" class="btn btn-secondary mb-3">Открыть банковский продукт</a>
 </div>
-<div class="row mb-3">
+<div class="row">
     <div class="col mb-3">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-sm">
             <caption>Клиент</caption>
             <tbody>
                 <tr>
@@ -84,7 +84,7 @@ $this->registerJsFile('info');
     <p>Банковские продукты клиента отсутствуют</p>
 <?php else: ?>
     <div class="mb-3">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-sm">
             <caption>Банковские продукты клиента</caption>
             <thead>
                 <tr>

@@ -9,7 +9,7 @@ use app\widgets\PaginationWidget;
 <?php if (count($products) === 0): ?>
     <p>Банковские продукты отсутствуют</p>
 <?php else: ?>
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-sm">
         <caption>Банковские продукты</caption>
         <thead>
             <tr>
