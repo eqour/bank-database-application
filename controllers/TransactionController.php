@@ -20,16 +20,29 @@ class TransactionController extends Controller {
     public function actionPreform(string $account = '') {
         $serviceService = new ServiceService();
         $service = $serviceService->findByAccountNumber($account);
+
         if (!isset($service)) {
             $this->redirect(DIRECTORY_SEPARATOR);
         }
+
         $form = new TransactionPreformForm();
+        $operationRejected = null;
+        
         if ($form->load($_POST) && $form->validate()) {
-            $operationService = new OperationService();
-            $operationService->preform($form->accountNumber, $form->amount, $form->description);
-            $this->redirect(DIRECTORY_SEPARATOR . 'banking-product' . DIRECTORY_SEPARATOR . 'info', ['account' => $account]);
+            if (!isset($service->actual_close_date)) {
+                $operationService = new OperationService();
+                $operationService->preform($form->accountNumber, $form->amount, $form->description);
+                $this->redirect(DIRECTORY_SEPARATOR . 'banking-product' . DIRECTORY_SEPARATOR . 'info', ['account' => $account]);
+            } else {
+                $operationRejected = true;
+            }
         }
+
         $form->accountNumber = $service->account_number;
-        return $this->render('preform', ['form' => $form]);
+
+        return $this->render('preform', [
+            'form' => $form,
+            'operationRejected' => $operationRejected
+        ]);
     }
 }

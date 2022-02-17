@@ -25,4 +25,7 @@ use app\helpers\FormHelper;
     <div class="mb-3">
         <button class="btn btn-secondary">Выполнить</button>
     </div>
+    <?php if (isset($operationRejected)): ?>
+        <div class="alert alert-danger">Невозможно выполнить операцию</div>
+    <?php endif; ?>
 </form>
