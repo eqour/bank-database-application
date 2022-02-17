@@ -8,7 +8,17 @@ use app\widgets\PaginationWidget;
 <h1>Информация о банковском продукте</h1>
 
 <div class="mb-3">
-    <a href="/transaction/preform?account=<?= $product->account_number ?>" class="btn btn-secondary mb-3">Новая операция</a>
+    <a href="/transaction/preform?account=<?= $product->account_number ?>" class="btn btn-secondary mb-3 <?= (isset($product->actual_close_date) ? 'disabled' : '') ?>">Новая операция</a>
+    <?php if (!isset($product->actual_close_date) && $currentAccountAmount === (float)0): ?>
+        <form class="form" method="POST">
+            <?= FormHelper::generateGetParameters($appendFormParams); ?>
+            <input class="form-control" value="<?= htmlspecialchars($product->account_number) ?>" name="<?= FormHelper::fieldName($closingForm, 'accountNumber') ?>" type="text" hidden>
+            <button class="btn btn-secondary mb-3">Закрыть банковский продукт</button>
+        </form>
+        <?php if (isset($serviceAmountIsNotNull)): ?>
+            <div class="alert alert-danger">Сумма на счёте банковского продукта должна быть равна нулю</div>
+        <?php endif; ?> 
+    <?php endif; ?>
 </div>
 <div class="row mb-3">
     <div class="col mb-3">

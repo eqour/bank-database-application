@@ -166,4 +166,14 @@ class ServiceService {
         $fetchResult = $stm->fetch();
         return $fetchResult['sum'];
     }
+
+    public function closeService(string $accountNumber): void {
+        $stm = Application::$pdo->prepare('UPDATE `service`
+            SET `service`.`actual_close_date` = :closedate
+            WHERE `service`.`account_number` = :accountnumber
+            AND `service`.`actual_close_date` IS NULL;');
+        $stm->bindValue('accountnumber', $accountNumber);
+        $stm->bindValue('closedate', date('Y-m-d'));
+        $stm->execute();
+    }
 }
