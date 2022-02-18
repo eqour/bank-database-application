@@ -7,6 +7,8 @@ class TransactionPreformForm extends Form {
     public $amount;
     public $description;
 
+    public float $floatAmount;
+
     protected function fieldNames(): array {
         return [
             'accountNumber',
@@ -24,7 +26,7 @@ class TransactionPreformForm extends Form {
             $this->description = trim($this->description);
             if ($this->description === '') {
                 $this->description = null;
-            } else if (1 !== preg_match('/^[A-Za-zА-Яа-яЁё0-9 -]{1,100}$/', $this->accountNumber)) {
+            } else if (1 !== preg_match('/^[A-Za-zА-Яа-яЁё0-9 -]{1,100}$/u', $this->accountNumber)) {
                 $this->addError('description', 'Используйте символы русского и английского алфавита, цифры, а также дефис');
             }
         }
@@ -45,9 +47,9 @@ class TransactionPreformForm extends Form {
             $this->addError('amount', 'Не более двух заков после запятой');
         }
 
-        $this->amount = floatval($amountString);
+        $this->floatAmount = floatval($amountString);
 
-        if (!is_float($this->amount)) {
+        if (!is_float($this->floatAmount)) {
             $this->addError('amount', 'Введите корректное значение');
         }
     }

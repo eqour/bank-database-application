@@ -27,20 +27,41 @@ class ServiceTypeService {
         return $serviceType;
     }
 
+    private function createServiceTypeFromFetchResult(array $result): ServiceType {
+        return $this->createServiceType(
+            $result['type_id'],
+            $result['type_name'],
+            $result['description'],
+            $result['annual_rate'],
+            $result['replenishment'],
+            $result['withdrawal'],
+            (new ServiceTypeGroupService())->createServiceTypeGroup($result['group_id'], $result['group_name'])
+        );
+    }
+
     public function createServiceTypes(array $fetchResult): array {
         $serviceTypes = [];
         foreach ($fetchResult as $row) {
-            $serviceTypes[] = $this->createServiceType(
-                $row['type_id'],
-                $row['type_name'],
-                $row['description'],
-                $row['annual_rate'],
-                $row['replenishment'],
-                $row['withdrawal'],
-                (new ServiceTypeGroupService())->createServiceTypeGroup($row['group_id'], $row['group_name'])
-            );
+            $serviceTypes[] = $this->createServiceTypeFromFetchResult($row);
         }
         return $serviceTypes;
+    }
+
+    public function findById(string $id): ?ServiceType {
+        $stm = Application::$pdo->prepare('SELECT
+            `service_type`.`id` AS `type_id`,
+            `service_type`.`name` AS `type_name`,
+            `service_type_group`.`id` AS `group_id`,
+            `service_type_group`.`name` AS `group_name`,
+            `description`, `annual_rate`,
+            `replenishment`,
+            `withdrawal`
+            FROM `service_type` INNER JOIN `service_type_group` ON `service_type`.`service_type_group_id` = `service_type_group`.`id`
+            WHERE `service_type`.`id` = :id;');
+        $stm->bindValue('id', $id);
+        $stm->execute();
+        $serviceType = $stm->fetch();
+        return $serviceType === false ? null : $this->createServiceTypeFromFetchResult($serviceType);
     }
     
     public function findAll(): array {

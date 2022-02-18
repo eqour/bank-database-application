@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\application\Application;
 use app\forms\BankingProductClosingForm;
+use app\forms\BankingProductRegistrationForm;
 use app\forms\BankingProductSearchForm;
 use app\forms\TransactionFilterFrom;
 use app\helpers\PaginationHelper;
@@ -87,7 +88,36 @@ class BankingProductController extends Controller {
         ]);
     }
     
-    public function actionRegistration() {
-        return $this->render('registration');
+    public function actionRegistration(string $id = '') {
+        $customerService = new CustomerService();
+        $customer = $customerService->findById($id);
+
+        if (!isset($customer)) {
+            $this->redirect(DIRECTORY_SEPARATOR);
+        }
+
+        $serviceTypeService = new ServiceTypeService();
+        $serviceTypes = $serviceTypeService->findAll();
+
+        $registrationForm = new BankingProductRegistrationForm();
+
+        if ($registrationForm->load($_POST) && $registrationForm->validate()) {
+            if ($serviceTypeService->findById($registrationForm->type)) {
+                $serviceService = new ServiceService();
+                $serviceService->register($customer->id,
+                    $registrationForm->type,
+                    $registrationForm->initialFloatAmount,
+                    $registrationForm->plannedCDate,
+                    $registrationForm->purpose
+                );
+                return $this->redirect(DIRECTORY_SEPARATOR . 'customer' . DIRECTORY_SEPARATOR . 'info', ['id' => $customer->id]);
+            }
+        }
+
+        return $this->render('registration', [
+            'form' => $registrationForm,
+            'types' => $serviceTypes,
+            'customer' => $customer
+        ]);
     }
 }

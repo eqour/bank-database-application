@@ -31,8 +31,8 @@ class TransactionController extends Controller {
         if ($form->load($_POST) && $form->validate()) {
             if (!isset($service->actual_close_date)) {
                 $operationService = new OperationService();
-                $operationService->preform($form->accountNumber, $form->amount, $form->description);
-                $this->redirect(DIRECTORY_SEPARATOR . 'banking-product' . DIRECTORY_SEPARATOR . 'info', ['account' => $account]);
+                $operationService->preform($form->accountNumber, $form->floatAmount, $form->description);
+                return $this->redirect(DIRECTORY_SEPARATOR . 'banking-product' . DIRECTORY_SEPARATOR . 'info', ['account' => $account]);
             } else {
                 $operationRejected = true;
             }

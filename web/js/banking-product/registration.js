@@ -1,16 +1,16 @@
 $(window).ready(function () {
     updateOpenPurposeInput();
-    $('[name=product-type]').on('input', updateOpenPurposeInput);
+    $('[name="BankingProductRegistrationForm\[type\]"]').on('input', updateOpenPurposeInput);
     $('#root').removeAttr('hidden');
-    $('[name=product-type]').focus();
+    $('[name="BankingProductRegistrationForm\[type\]"]').focus();
 });
 
 function updateOpenPurposeInput() {
-    const selectedProductType = $('[name=product-type] option:selected').attr('data-product');
+    const selectedProductType = $('[name="BankingProductRegistrationForm\[type\]"] option:selected').attr('data-product');
     if (selectedProductType === 'deposit') {
-        $('[name=open-purpose]').attr('disabled', '');
-        $('[name=open-purpose]').val('');
+        $('[name="BankingProductRegistrationForm\[purpose\]"]').attr('disabled', '');
+        $('[name="BankingProductRegistrationForm\[purpose\]"]').val('');
     } else {
-        $('[name=open-purpose]').removeAttr('disabled');
+        $('[name="BankingProductRegistrationForm\[purpose\]"]').removeAttr('disabled');
     }
 }

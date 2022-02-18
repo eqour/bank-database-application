@@ -176,4 +176,18 @@ class ServiceService {
         $stm->bindValue('closedate', date('Y-m-d'));
         $stm->execute();
     }
+
+    public function register(string $customerId, string $serviceTypeId, float $initialAmount, ?DateTime $plannedCloseDate = null, ?string $purpose = null): void {
+        $stm = Application::$pdo->prepare('INSERT
+            INTO `service` (`account_number`, `open_date`, `planned_close_date`, `initial_amount`, `purpose`, `service_type_id`, `contract_id`)
+            VALUES ((SELECT * FROM (SELECT MAX(CAST(`account_number` AS DECIMAL(20, 0)) + 1) FROM `service`) AS `s1`), :open_date, :close_date, :initial_amount, :purpose, :service_type,
+            (SELECT `contract`.`id` FROM `contract` INNER JOIN `customer` ON `customer`.`id` = `contract`.`customer_id` WHERE `customer`.`id` = :customer_id AND (`contract`.`determination_date` IS NULL OR `contract`.`determination_date` > NOW()) ORDER BY `contract`.`conclusion_date` LIMIT 0, 1));');
+        $stm->bindValue('open_date', date('Y-m-d'));
+        $stm->bindValue('close_date', (isset($plannedCloseDate) ? $plannedCloseDate->format('Y-m-d') : null));
+        $stm->bindValue('initial_amount', $initialAmount);
+        $stm->bindValue('purpose', $purpose);
+        $stm->bindValue('service_type', $serviceTypeId, PDO::PARAM_INT);
+        $stm->bindValue('customer_id', $customerId, PDO::PARAM_INT);
+        $stm->execute();
+    }
 }
