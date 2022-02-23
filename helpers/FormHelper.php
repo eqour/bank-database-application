@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use app\application\Application;
 use app\forms\Form;
 
 class FormHelper {
@@ -15,6 +16,10 @@ class FormHelper {
 
     public static function fieldName(Form $form, string $fieldName): string {
         return htmlspecialchars($form->name() . '[' . $fieldName . ']');
+    }
+
+    public static function csrf(Form $form): string {
+        return '<input hidden name="' . self::fieldName($form, 'csrf') . '" value="' . Application::$csrfTokenSource->getCSRFTokenHash() . '" >';
     }
 
     public static function generateGetParameters(array $parameters): string {

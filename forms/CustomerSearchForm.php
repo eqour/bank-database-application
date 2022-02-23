@@ -6,9 +6,9 @@ class CustomerSearchForm extends Form {
     public string $passport;
 
     protected function fieldNames(): array {
-        return [
+        return array_merge(parent::fieldNames(), [
             'passport'
-        ];
+        ]);
     }
 
     protected function validateFields(): void {

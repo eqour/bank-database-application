@@ -18,4 +18,5 @@ use app\helpers\FormHelper;
     <?php if (isset($doesNotExist)): ?>
         <div class="alert alert-danger">Клиент не найден</div>
     <?php endif; ?>
+    <?= FormHelper::csrf($form) ?>
 </form>

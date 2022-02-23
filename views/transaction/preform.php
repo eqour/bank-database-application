@@ -28,4 +28,5 @@ use app\helpers\FormHelper;
     <?php if (isset($operationRejected)): ?>
         <div class="alert alert-danger">Невозможно выполнить операцию</div>
     <?php endif; ?>
+    <?= FormHelper::csrf($form) ?>
 </form>

@@ -77,6 +77,7 @@ $this->registerJsFile('info');
                     <button class="btn btn-secondary">Найти</button>
                 </div>
             </div>
+            <?= FormHelper::csrf($form) ?>
         </form>
     </div>
 </div>

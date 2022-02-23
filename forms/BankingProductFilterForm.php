@@ -19,12 +19,12 @@ class BankingProductFilterForm extends Form {
     public ?DateTime $dateTill;
 
     protected function fieldNames(): array {
-        return [
+        return array_merge(parent::fieldNames(), [
             'accountNumber',
             'status',
             'from',
             'till'
-        ];
+        ]);
     }
 
     protected function validateFields(): void {

@@ -6,9 +6,9 @@ class BankingProductSearchForm extends Form {
     public $accountNumber;
 
     protected function fieldNames(): array {
-        return [
+        return array_merge(parent::fieldNames(), [
             'accountNumber'
-        ];
+        ]);
     }
 
     protected function validateFields(): void {

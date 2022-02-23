@@ -2,14 +2,17 @@
 
 namespace app\application;
 
+use app\application\security\CSRFTokenSource;
 use app\controllers\DefaultController;
 use app\helpers\TextHelper;
 
 class Application {
     public const APPLICATION_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
+    public const APPLICATION_SECRET = '4i6jhy1ufu6q3f6zh4knxmc6frsieyh9';
 
     public static int $maxRecordsPerPage = 5;
     public static \PDO $pdo;
+    public static CSRFTokenSource $csrfTokenSource;
 
     public static function run(): void {
         set_error_handler(function($errno, $errstr, $errfile, $errline) {
@@ -19,6 +22,11 @@ class Application {
         try {
             self::requireFilesInDir(self::APPLICATION_ROOT);
             self::$pdo = new \PDO('mysql:host=localhost;dbname=bank', 'bank-user-value', 'bank-password-value');
+            self::$csrfTokenSource = new CSRFTokenSource();
+            setcookie('csrf', self::$csrfTokenSource::getCSRFToken(), [
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]);
             self::executeAction(RouteParser::parse());
         } catch (\Throwable $exception) {
             ob_end_clean();

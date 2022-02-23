@@ -10,11 +10,11 @@ class TransactionPreformForm extends Form {
     public float $floatAmount;
 
     protected function fieldNames(): array {
-        return [
+        return array_merge(parent::fieldNames(), [
             'accountNumber',
             'amount',
             'description'
-        ];
+        ]);
     }
 
     protected function validateFields(): void {

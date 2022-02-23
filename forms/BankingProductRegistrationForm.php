@@ -16,13 +16,13 @@ class BankingProductRegistrationForm extends Form {
     public float $initialFloatAmount;
 
     protected function fieldNames(): array {
-        return [
+        return array_merge(parent::fieldNames(), [
             'customer',
             'type',
             'plannedCloseDate',
             'initialAmount',
             'purpose'
-        ];
+        ]);
     }
 
     protected function validateFields(): void {

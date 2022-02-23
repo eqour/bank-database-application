@@ -13,7 +13,8 @@ use app\widgets\PaginationWidget;
         <form class="form" method="POST">
             <?= FormHelper::generateGetParameters($appendFormParams); ?>
             <input class="form-control" value="<?= htmlspecialchars($product->account_number) ?>" name="<?= FormHelper::fieldName($closingForm, 'accountNumber') ?>" type="text" hidden>
-            <button class="btn btn-secondary mb-3">Закрыть банковский продукт</button>
+            <button class="btn btn-secondary mb-3">Закрыть банковский продукт</button>            
+            <?= FormHelper::csrf($closingForm) ?>
         </form>
         <?php if (isset($serviceAmountIsNotNull)): ?>
             <div class="alert alert-danger">Сумма на счёте банковского продукта должна быть равна нулю</div>
@@ -79,7 +80,8 @@ use app\widgets\PaginationWidget;
             <?= FormHelper::generateGetParameters($appendFormParams); ?>
             <div class="mb-3">
                 <button class="btn btn-secondary">Найти</button>
-            </div>
+            </div>            
+            <?= FormHelper::csrf($form) ?>
         </form>
     </div>
 </div>

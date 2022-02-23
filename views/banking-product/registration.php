@@ -43,5 +43,6 @@ var_dump($form);
         <div class="mb-3">
             <button class="btn btn-secondary">Оформить</button>
         </div>
+        <?= FormHelper::csrf($form) ?>
     </form>
 </div>

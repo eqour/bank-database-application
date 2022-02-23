@@ -13,10 +13,10 @@ class TransactionFilterFrom extends Form {
     public ?DateTime $dateTill;
 
     protected function fieldNames(): array {
-        return [
+        return array_merge(parent::fieldNames(), [
             'from',
             'till'
-        ];
+        ]);
     }
 
     protected function validateFields(): void {

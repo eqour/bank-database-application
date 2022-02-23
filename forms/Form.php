@@ -2,12 +2,20 @@
 
 namespace app\forms;
 
+use app\application\Application;
+
 class Form {
     private $errors = null;
 
     public function validate(): bool {
         $this->validateFields();
-        return !$this->hasErrors();
+        return !$this->hasErrors() && $this->validateCSRF();
+    }
+
+    private function validateCSRF(): bool {
+        $csrf = isset($_COOKIE['csrf']) ? $_COOKIE['csrf'] : '';
+        $hash = isset($this->csrf) ? $this->csrf : '';
+        return Application::$csrfTokenSource::validateCSRFToken($csrf, $hash);
     }
 
     public function hasErrors(?string $field = null): bool {
@@ -66,7 +74,9 @@ class Form {
     }
 
     protected function fieldNames(): array {
-        return [];
+        return [
+            'csrf'
+        ];
     }
 
     public function getField(string $name): string {
