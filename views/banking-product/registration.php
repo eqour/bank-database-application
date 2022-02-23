@@ -4,8 +4,6 @@ use app\helpers\FormHelper;
 
 $this->registerJsFile('registration');
 
-var_dump($form);
-
 ?>
 
 <h1>Оформление банковского продукта</h1>
