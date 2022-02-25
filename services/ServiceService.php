@@ -109,7 +109,7 @@ class ServiceService {
             '.(!isset($accountNumber) && isset($from) ? ('AND `service`.`open_date` >= "'.$from->format('Y-m-d').'" ') : '').'
             '.(!isset($accountNumber) && isset($till) ? ('AND `service`.`open_date` <= "'.$till->format('Y-m-d').'" ') : '').'
             '.(!isset($accountNumber) && isset($status) && $status !== BankingProductFilterForm::STATUS_ALL ? ('AND `service`.`actual_close_date` IS '.($status === BankingProductFilterForm::STATUS_OPEN ? 'NULL' : 'NOT NULL')) : '').'
-            ORDER BY `service`.`open_date` DESC
+            ORDER BY `service`.`open_date` DESC, `service`.`account_number` DESC
             LIMIT :offset, :amount;');
         $stm->bindValue('customerid', $customerId, PDO::PARAM_INT);
         $stm->bindValue('offset', $min - 1, PDO::PARAM_INT);

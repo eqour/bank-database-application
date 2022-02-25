@@ -118,7 +118,7 @@ class OperationService {
             WHERE `service`.`account_number` = :accountnumber
             '.(isset($from) ? ('AND `operation`.`date` >= "'.$from->format('Y-m-d').'" ') : '').'
             '.(isset($till) ? ('AND `operation`.`date` <= "'.$till->format('Y-m-d').'" ') : '').'
-            ORDER BY `operation`.`date` DESC
+            ORDER BY `operation`.`date` DESC, `operation`.`id` DESC
             LIMIT :offset, :amount;');
         $stm->bindValue('accountnumber', $accountNumber);
         $stm->bindValue('offset', $min - 1, PDO::PARAM_INT);
