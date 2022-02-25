@@ -20,9 +20,7 @@ class Application {
         });
         ob_start();
         try {
-            self::requireFilesInDir(self::APPLICATION_ROOT);
-            self::$pdo = new \PDO('mysql:host=localhost;dbname=bank', 'bank-user-value', 'bank-password-value');
-            self::$csrfTokenSource = new CSRFTokenSource();
+            self::init();
             setcookie('csrf', self::$csrfTokenSource::getCSRFToken(), [
                 'httponly' => true,
                 'samesite' => 'Strict'
@@ -34,6 +32,12 @@ class Application {
             throw new \Exception('Application error', 0, $exception);
         }
         ob_end_flush();
+    }
+
+    public static function init(): void {
+        self::requireFilesInDir(self::APPLICATION_ROOT);
+        self::$pdo = new \PDO('mysql:host=localhost;dbname=bank', 'bank-user-value', 'bank-password-value');
+        self::$csrfTokenSource = new CSRFTokenSource();
     }
 
     private static function executeAction(array $route): void {
@@ -68,6 +72,14 @@ class Application {
         ];
     }
 
+    private static function getDirectoriesIgnoredToRequire(): array {
+        return [
+            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'views',
+            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'web',
+            self::APPLICATION_ROOT . DIRECTORY_SEPARATOR . 'scripts'
+        ];
+    }
+
     private static function requireFilesInDir(string $directoryPath): void {
         foreach (self::getFilesToFirstRequire() as $filename) {
             require_once $filename;
@@ -75,7 +87,7 @@ class Application {
         $files = scandir($directoryPath);
         for ($i = 2; $i < count($files); $i++) {
             $fullPath = $directoryPath . DIRECTORY_SEPARATOR . $files[$i];
-            if (is_dir($fullPath) && $files[$i] != 'views') {
+            if (is_dir($fullPath) && !in_array($fullPath, self::getDirectoriesIgnoredToRequire())) {
                 self::requireFilesInDir($fullPath);
             } else if(str_ends_with($files[$i], '.php')) {
                 require_once $fullPath;
