@@ -14,11 +14,11 @@ class CSRFTokenSource {
 
     public static function getCSRFTokenHash(): string {
         self::initIfRequired();
-        return hash('sha256', self::$_csrf . Application::APPLICATION_SECRET);
+        return hash('sha256', self::$_csrf . Application::$secret);
     }
 
     public static function validateCSRFToken(string $token, string $hash): bool {
-        return strcmp($hash, hash('sha256', $token . Application::APPLICATION_SECRET)) === 0;
+        return strcmp($hash, hash('sha256', $token . Application::$secret)) === 0;
     }
 
     private static function initIfRequired(): void {

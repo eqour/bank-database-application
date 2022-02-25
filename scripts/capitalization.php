@@ -5,5 +5,6 @@ use app\services\CapitalizationService;
 
 require '..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'Application.php';
 
-Application::init();
+$config = require '..'. DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+$app = new Application($config);
 CapitalizationService::executeCapitalization();
