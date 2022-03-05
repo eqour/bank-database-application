@@ -39,7 +39,7 @@ class CustomerService {
     }
 
     public function findByPassport(string $passport): ?Customer {
-        $stm = Application::$pdo->prepare('SELECT * FROM `customer` WHERE `passport` = :passport;');
+        $stm = Application::$pdo->prepare('SELECT * FROM `customer` INNER JOIN `contract` ON `customer`.`id` = `contract`.`customer_id` WHERE `passport` = :passport;');
         $stm->bindValue('passport', $passport);
         $stm->execute();
         $customer = $stm->fetch();
@@ -57,7 +57,7 @@ class CustomerService {
     }
 
     public function findById(string $id): ?Customer {
-        $stm = Application::$pdo->prepare('SELECT * FROM `customer` WHERE `id` = :id;');
+        $stm = Application::$pdo->prepare('SELECT * FROM `customer` INNER JOIN `contract` ON `customer`.`id` = `contract`.`customer_id` WHERE `customer`.`id` = :id;');
         $stm->bindValue('id', $id);
         $stm->execute();
         $customer = $stm->fetch();
