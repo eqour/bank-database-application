@@ -18,8 +18,12 @@ class Application {
     private array $ignoredDirectories;
 
     public function __construct(array $config) {
-        $this->config = $config;
-        $this->init();
+        try {
+            $this->config = $config;
+            $this->init();
+        } catch (\Throwable $exception) {
+            $this->processException($exception);
+        }
     }
 
     private function init(): void {
@@ -46,9 +50,7 @@ class Application {
             ]);
             $this->executeAction(RouteParser::parse());
         } catch (\Throwable $exception) {
-            ob_end_clean();
-            ob_start();
-            throw new \Exception('Application error', 0, $exception);
+            $this->processException($exception);
         }
         ob_end_flush();
     }
@@ -109,6 +111,16 @@ class Application {
             } else if(str_ends_with($files[$i], '.php')) {
                 require_once $fullPath;
             }
+        }
+    }
+
+    private function processException($exception): void {
+        ob_end_clean();
+        ob_start();
+        if (defined('APP_DEBUG')) {
+            throw new \Exception('Application error', 0, $exception);
+        } else {
+            (new DefaultController())->actionError500();
         }
     }
 }
